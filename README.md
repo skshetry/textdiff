@@ -7,7 +7,7 @@ Text diffing based on QT with live diff viewing support
 2. PyQt5
 
 ## Installation
-**Note: For only developmental purposes. Qt5 alone is ~600MB. And, not suggested to all.**
+**Note: For only developmental purposes.**
 1. Install Qt5 for your platform.
 2. Install PyQT5 using `pip install pyqt5` .
 3. Clone this repo.
