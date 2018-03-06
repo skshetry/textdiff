@@ -125,15 +125,16 @@ class Window(QMainWindow):
         # currently the save_path is same as file_path.
         # But you can change it here if you'd like.
         # eg. `python
-        # >>> save_path = file_path / 'text'/ 'files'
-        # Output: 'text/files'
-        save_path = file_path
+        # >>> save_path = file_path.with_name(self.SAVE_LOC) /'..' / 'texts'
+        # O: 'texts'
+        save_path = file_path.with_name(self.SAVE_LOC)
 
         # save the textbox contents to file.
         # Also aggregate few details about the text-input
-        with save_path.with_name(self.SAVE_LOC).open('w', encoding='utf8') as file:
-            file.write(str(self.text_edit.toPlainText()))
-            num_words, num_chars, num_lines = count_texts(str(self.text_edit.toPlainText()))
+        with save_path.open('w', encoding='utf8') as file:
+            _text = str(self.text_edit.toPlainText())
+            file.write(_text)
+            num_words, num_chars, num_lines = count_texts(_text)
 
         # give few details in the status bar
         self.statusBar().showMessage('Text changed. Autosaving...  '
@@ -181,7 +182,7 @@ class MainWindow(Window):
         self.original_text_edit.setDisabled(True)  # make text box uneditable
         self.done_button.setDisabled(True)  # disable this button
         self.statusBar().showMessage('Done. '
-                                     'Now, you won\'t be able to edit anything '
+                                     "Now, you won't be able to edit anything "
                                      'in the input box.')
 
         # show other window  for duplicate text
@@ -272,10 +273,17 @@ class DiffWindow(Window):
 def get_diffed_text():
     """Diff the text from two files."""
     # original file
-    original_file = Path(__file__).with_name(ORIG_TEXT).open('r', encoding='utf8')
+    original_file = (
+        Path(__file__)
+        .with_name(ORIG_TEXT)
+        .open('r', encoding='utf8')
+    )
 
-    # duplicate file
-    duplicate_file = Path(__file__).with_name(DUPL_TEXT).open('r', encoding='utf8')
+    duplicate_file = (
+        Path(__file__)
+        .with_name(DUPL_TEXT)
+        .open('r', encoding='utf8')
+    )
 
     # compare and diff line by line
     diff = difflib.Differ()
